@@ -33,6 +33,11 @@ namespace CarRentalManagement.Server.Data
       builder.ApplyConfiguration(new ColourSeedConfiguration());
       builder.ApplyConfiguration(new MakeSeedConfiguration());
       builder.ApplyConfiguration(new ModelSeedConfiguration());
+      builder.ApplyConfiguration(new RoleSeedConfiguration());
+      builder.ApplyConfiguration(new UserSeedConfiguration());
+      builder.ApplyConfiguration(new UserRoleSeedConfiguration());
+     
+
     }
   }
 
