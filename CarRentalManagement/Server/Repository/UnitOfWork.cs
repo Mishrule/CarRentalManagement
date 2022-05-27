@@ -44,7 +44,7 @@ namespace CarRentalManagement.Server.Repository
     public IGenericRepository<Customer> Customers =>
       _customers ??= new GenericRepository<Customer>(_context);
 
-    public IGenericRepository<Vehicle> Vehicle =>
+    public IGenericRepository<Vehicle> Vehicles =>
       _vehicles ??= new GenericRepository<Vehicle>(_context);
 
     public async Task Save(HttpContext httpContext)

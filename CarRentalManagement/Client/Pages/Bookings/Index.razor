@@ -1,0 +1,72 @@
+﻿@page "/bookings/"
+@using Microsoft.AspNetCore.Authorization
+@inject HttpClient _client
+@inject IJSRuntime Js
+@attribute [Authorize]
+
+<h3 class="card-title">Car Booking</h3>
+<hr />
+<br />
+
+@if (Bookings == null)
+{
+  <div class="alert alert-info">Loading Bookings</div>
+}
+else
+{
+  <table class = "table table-responsive">
+    <thead>
+    <tr>
+      <th>Customer Tax ID</th>
+      <th>Date</th>
+      <th>Duration in Days</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+  </table>
+  <tbody>
+  @foreach (var booking in Bookings)
+  {
+    <tr>
+      <td>@booking.Customer.TaxId</td>
+      <td>@booking.CreatedDate.Date.ToString("dd MMMM yyyy")</td>
+      <td>@((booking.DateIn - booking.DateOut).TotalDays.ToString())</td>
+      <td>
+        <a href = "/makes/view/@booking.Id" class = "btn btn-primary">
+          <span class="oi oi-book"></span>
+        </a>&nbsp;
+        <a href = "/makes/edit/@booking.Id" class = "btn btn-primary">
+          <span class = "oi oi-pencil"></span>
+        </a>&nbsp;
+        <button class = "btn btn-danger" @onclick= "@(() => Delete(booking.Id))">
+          <span class="oi oi-delete"></span>
+        </button>
+      </td>
+    </tr>
+  }
+  </tbody>
+}
+
+
+@code {
+  private List<Booking> Bookings;
+
+  protected async override Task OnInitializedAsync()
+  {
+    Bookings = await _client.GetFromJsonAsync<List<Booking>>(Endpoints.BookingsEndpoint);
+  }
+
+
+  async Task Delete(int id)
+  {
+    var booking = Bookings.First(q => q.Id == id);
+    var confirm = await Js.InvokeAsync<bool>("confirm", $"Do you want to Delete {booking.Customer?.ContactNumber}?");
+    if (confirm){
+
+      await _client.DeleteAsync($"{Endpoints.BookingsEndpoint}/{id}");
+    await OnInitializedAsync();
+  }
+
+}
+
+}
