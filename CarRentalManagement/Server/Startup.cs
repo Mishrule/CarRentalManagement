@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using CarRentalManagement.Server.IRepository;
+using CarRentalManagement.Server.Repository;
 
 namespace CarRentalManagement.Server
 {
@@ -37,6 +39,9 @@ namespace CarRentalManagement.Server
 
       services.AddIdentityServer()
           .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+
+      services.AddTransient<IUnitOfWork, UnitOfWork>(); 
+
 
       services.AddAuthentication()
           .AddIdentityServerJwt();
